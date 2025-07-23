@@ -98,6 +98,4 @@ class PyServerCLI:
         finally:
             os.chdir(cwd)
                 
-psc = PyServerCLI
-psc.create_project_structure("/workspaces/PyServer-Designer", "testproject")
 

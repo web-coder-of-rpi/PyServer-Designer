@@ -14,7 +14,7 @@ def fetch_contributors(owner, repo):
         return []
 
 def update_contributors_md(contributors):
-    with open(CONTRIBUTERS_FILE, "w") as f:
+    with open(CONTRIBUTORS_FILE, "w") as f:
         f.write("<!-- filepath: /workspaces/PyServer-Designer/CONTRIBUTERS.md -->\n")
         f.write("This is a list of all the contributors of this repository.\n")
         f.write("It is updated automatically.\n\n")

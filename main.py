@@ -1,6 +1,5 @@
 import os
 import sys
-import subprocess
 class PyServerCLI:
     @staticmethod
     def get_os():

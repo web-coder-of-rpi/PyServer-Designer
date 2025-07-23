@@ -1,7 +1,7 @@
 import os
-import sys
-import subprocess
-class PyServerCLI:
+import sys # Both for file creation
+class PyServerCLI:.
+    # Return system type, needed for creating projects
     @staticmethod
     def get_os():
         if os.name == 'nt':
@@ -80,7 +80,7 @@ class PyServerCLI:
         Creates a basic project structure for PyServer-Designer.
         """
         project_root = os.path.join(base_path, project_name)
-        system = PyServerCLI.get_os()
+        system = PyServerCLI.get_os() # Use the get_os function to know what commands to use
         # Create the root directory if it doesn't exist
         os.makedirs(project_root, exist_ok=True)
         # Save current working directory
@@ -99,5 +99,5 @@ class PyServerCLI:
             os.chdir(cwd)
                 
 psc = PyServerCLI
-psc.create_project_structure("/workspaces/PyServer-Designer", "testproject")
+psc.create_project_structure("/workspaces/PyServer-Designer", "testproject") # Test functions
 

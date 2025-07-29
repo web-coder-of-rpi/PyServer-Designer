@@ -1,20 +1,20 @@
 import os
 import sys
 class PyServerCLI:
-    @staticmethod
-    def get_os():
-        if os.name == 'nt':
-            return "Windows"
-        elif os.name == 'posix':
-            if sys.platform == 'darwin':
-                return "macOS"
-            elif sys.platform.startswith('linux'):
-                return "Linux"
-            else:
-                return "Unix-like"
-        else:
-            return "Unknown"
-    
+    def __init__(self):
+        # Define optional modes
+        self.oModes = {
+     "echo": [
+        {"pos": 1, "options": ['display', 'show', 'print'], "optional": True},
+      ]
+    }
+
+    # Define required modes
+        self.rModes = {
+      "echo": [
+        {"pos": 2, "options": "any", "optional": False},
+      ]
+    }
     # Short for Check If Command Exists
     @staticmethod
     def checkICE(command):
@@ -28,73 +28,4 @@ class PyServerCLI:
         else:
             return 1  # Command does not exist
 
-    @staticmethod
-    def checkargs(command, args):
-        """
-        Checks if the provided args for a command are valid.
-        Returns 0 if valid, 1 if invalid command, 2 if invalid args.
-        """
-        # Define expected args for each command (number of args)
-        command_args = {
-            'newProject': 1,         # project_name
-            'openProject': 1,        # project_name
-            'addPage': 1,            # page_name
-            'editPage': 1,           # page_name
-            'exitProject': 0,
-            'deleteProject': 1,      # project_name
-            'setting': 2,            # key value
-            'printProjectInfo': 0,
-            'deletePage': 1,         # page_name
-            'newStylesheet': 1,      # stylesheet_name
-            'editStylesheet': 1,     # stylesheet_name
-            'deleteStyleSheet': 1,   # stylesheet_name
-            'newDatabase': 1,        # db_name
-            'editDatabase': 1,       # db_name
-            'deleteDatabase': 1,     # db_name
-            'newScript': 1,          # script_name
-            'editScript': 1,         # script_name
-            'deleteScript': 1,       # script_name
-            'renamePage': 2,         # old_name new_name
-            'renameProject': 2,      # old_name new_name
-            'renameStylesheet': 2,   # old_name new_name
-            'renameDatabase': 2,     # old_name new_name
-            'renameScript': 2        # old_name new_name
-        }
-
-        if PyServerCLI.checkICE(command) != 0:
-            return 1  # Invalid command
-
-        expected_arg_count = command_args.get(command, None)
-        if expected_arg_count is None:
-            return 1  # Command not found in arg list
-
-        if len(args) == expected_arg_count:
-            return 0  # Args are valid
-        else:
-            return 2  # Invalid number of args
-        
-    @staticmethod
-    def create_project_structure(base_path, project_name):
-        """
-        Creates a basic project structure for PyServer-Designer.
-        """
-        project_root = os.path.join(base_path, project_name)
-        system = PyServerCLI.get_os()
-        # Create the root directory if it doesn't exist
-        os.makedirs(project_root, exist_ok=True)
-        # Save current working directory
-        cwd = os.getcwd()
-        try:
-            os.chdir(project_root)
-            # Create subdirectories
-            os.makedirs("pages", exist_ok=True)
-            os.makedirs("scripts", exist_ok=True)
-            os.makedirs("stylesheets", exist_ok=True)
-            os.makedirs("databases", exist_ok=True)
-            # Create files
-            open("README.md", "a").close()
-            open(".pysdproject", "a").close()
-        finally:
-            os.chdir(cwd)
-                
-
+    

@@ -123,4 +123,5 @@ class PyServerCLI:
         elif code == 3:
             return 3
         else:
-            PyServerCLI_Commands.{command} #type:ignore This will be added soon
+          method = getattr(PyServerCLI_Commands, command) #type:ignore This will be added soon
+          method()

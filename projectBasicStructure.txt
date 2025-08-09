@@ -1,0 +1,21 @@
+projectName/
+    runserver.py
+    README.md
+    .pysdproj
+    LICENCE.txt (optional)
+    pages/
+        page1.html
+        page2.html
+    stylesheets/
+        page1.css
+        page2.css
+        -- or --
+        global.css
+    scripts/
+        loadgame.js
+        animation.js
+    databases/
+        users.db
+    other/ (you have to add files in here by yourself, not by the CLI)
+        game.exe
+        gameData.xml

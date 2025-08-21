@@ -77,7 +77,7 @@ if os.name == 'nt':
 
 else:
     print("Linux/MacOS system detected.")
-    config_dir = "/lib/pyserver-designer"
+    config_dir = os.path.expanduser("~/.config/pyserver_designer/config.json")
     config_path = os.path.join(config_dir, "config.json")
     # Create directory if it doesn't exist
     if not os.path.isdir(config_dir):
@@ -134,7 +134,7 @@ else:
                 correct += 25
             else:
                 print("Line incorrect.")
-            if config['defaultAddLicenceType'] in ['GPL', 'LGPL', 'MIT', 'MPL', 'APACHE'] and config['defaultAddLicence'] == True:
+            if config['defaultAddLicenceType'] in ['GPL', 'LGPL', 'MIT', 'MPL', 'APACHE'] and config['defaultAddLicence'] is not None:
                 correct += 25
             else:
                 print("Line incorrect.")
@@ -142,7 +142,7 @@ else:
                 correct += 25
             else:
                 print("Line incorrect.")
-            if config['defaultAddDefaultPagePageName'] is not None and config['defaultAddDefaultPage'] == True:
+            if config['defaultAddDefaultPagePageName'] is not None and config['defaultAddDefaultPage'] is not None:
                 correct += 25
             if correct == 100:
                 print("Test passed.")

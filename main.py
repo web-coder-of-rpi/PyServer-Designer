@@ -1,6 +1,8 @@
 import os
 import json
 import licences
+import traceback
+import sys
 
 class PyServerCLI:
     # Define optional modes as a class variable
@@ -9,7 +11,7 @@ class PyServerCLI:
             "description": "Create a new project at the specified path.",
             "args": [
                 {"pos": 1, "options": "any", "optional": False},
-                {"pos": 2, "options": ['MPL', 'LGPL', 'GPL', 'MIT', 'APACHE']}
+                {"pos": 2, "options": ['MPL', 'LGPL', 'GPL', 'MIT', 'APACHE'], "optional": True}
             ]
         },
         "openProject": {
@@ -239,7 +241,7 @@ class PyServerCLI_commands():
         with open("runserver.py", "w") as r:
             content = f"""
 #--------------------------------------{project_name}--------------------------------------#
-This is a PyServer-Designer Project. (https://github.com/web-coder-of-rpi/PyServer-Designer)
+#This is a PyServer-Designer Project. (https://github.com/web-coder-of-rpi/PyServer-Designer)
 #------------------------------------------------------------------------------------------#
 import flask
 
@@ -258,13 +260,13 @@ import flask
         else:
             config_path = os.path.expanduser("~/.config/pyserver_designer/config.json")
 
-        if os.path.exists(config_path):
+        if os.path.exists(config_path) and os.path.isfile(config_path):
             with open(config_path, "r") as j:
                 config = json.load(j)
             # Handle license
             if not config.get('defaultAddLicence', False):
                 if licence is None:
-                    print("Please specify licence type.")
+                    print("Writing with no licence.")
                 elif licence in ['GPL', 'LGPL', 'MIT', 'MPL', 'APACHE']:
                     if licence == "GPL":
                         wlicence = licences.gnu_gpl_three()
@@ -279,8 +281,35 @@ import flask
                     else:
                         wlicence = ""
                     if wlicence:
-                        with open("LICENSE", "w") as lic:
+                        with open("LICENSE.txt", "w") as lic:
                             lic.write(wlicence)
+            # Handle default page
+            if config.get('defaultAddDefaultPage') and config.get('defaultAddDefaultPagePageName'):
+                page_name = config['defaultAddDefaultPagePageName']
+                pages_dir = os.path.join(project_path, "pages")
+                page_path = os.path.join(pages_dir, page_name)
+                if not os.path.exists(page_path):
+                    with open(page_path, "w") as f:
+                        f.write("")
+        else:
+            if licence is not None:
+                if licence == "GPL":
+                    wlicence = licences.gnu_gpl_three()
+                elif licence == "LGPL":
+                    wlicence = licences.gnu_lgpl_three()
+                elif licence == "MIT":
+                    wlicence = licences.mit()
+                elif licence == "MPL":
+                    wlicence = licences.mpl()
+                elif licence == "APACHE":
+                    wlicence = licences.apache()
+                else:
+                    wlicence = ""
+                if wlicence:
+                    with open("LICENSE.txt", "w") as lic:
+                        lic.write(wlicence)
+                
+
             # Handle default page
             if config.get('defaultAddDefaultPage') and config.get('defaultAddDefaultPagePageName'):
                 page_name = config['defaultAddDefaultPagePageName']
@@ -299,11 +328,15 @@ class CLI:
         else:
             os.system('clear')
         print(f"PyServer Designer CLI")
-        print("Type 'help' for a list of commands. Use 'exit' or 'quit' to exit the CLI.")
+        print("Type 'help' for a list of commands. Use 'exit' or 'quit' to exit the CLI, and 'restart' or 'reset' to re-run the program.")
         while True:
             command = input("PyServer> ")  
             if command.lower() in ['exit', 'quit']:
                 print("Exiting PyServer Designer CLI.")
+                if os.name == "nt":
+                    os.system("cls")
+                else:
+                    os.system("clear")
                 break
             elif command.lower() in ['erase', 'clear']:
                 if os.name == 'nt':
@@ -311,6 +344,9 @@ class CLI:
                 else:
                     os.system('clear')
                 continue  # Just clear and continue, don't break or recurse
+            elif command.lower()in ['restart', 'reset']:
+                os.execv(sys.executable, ['python'] + sys.argv)
+                continue
             try:
                 result = PyServerCLI.runCommand(command)
                 if result == 1:
@@ -320,7 +356,12 @@ class CLI:
                 elif result == 3:
                     print("Error: Invalid argument value.")
             except Exception as e:
-                print(f"An error occurred: {e}")
+                tb = traceback.extract_tb(e.__traceback__)
+                if tb:
+                    err_line = tb[-1].lineno
+                    print(f"An error occurred on line {err_line}: {e}")
+                else:
+                    print(f"An error occurred: {e}")
                 print("Please check your syntax and try again.")
 
 CLI.run()

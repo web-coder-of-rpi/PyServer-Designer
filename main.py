@@ -229,6 +229,11 @@ class PyServerCLI_commands():
 
     @staticmethod
     def newProject(project_path, licence=None):
+        if os.name == "nt":
+            config_path = "C:/ProgramData/pyserver_designer/config.json"
+        else:
+            config_path = os.path.expanduser("~/.config/pyserver_designer/config.json")
+
         project_name = os.path.basename(project_path)
         root_path = os.path.dirname(project_path)
         os.makedirs(project_path, exist_ok=True)
@@ -254,12 +259,7 @@ import flask
             """
             m.write(content)
 
-        # Handle config and license
-        if os.name == "nt":
-            config_path = "C:/ProgramData/pyserver_designer/config.json"
-        else:
-            config_path = os.path.expanduser("~/.config/pyserver_designer/config.json")
-
+        # Handle license
         if os.path.exists(config_path) and os.path.isfile(config_path):
             with open(config_path, "r") as j:
                 config = json.load(j)
@@ -271,13 +271,13 @@ import flask
                     if licence == "GPL":
                         wlicence = licences.gnu_gpl_three()
                     elif licence == "LGPL":
-                        wlicence = licences.gnu_lgpl_three()
+                        wlicence = licences.gnu_lgpl_licence()
                     elif licence == "MIT":
-                        wlicence = licences.mit()
+                        wlicence = licences.mit_licence()
                     elif licence == "MPL":
-                        wlicence = licences.mpl()
+                        wlicence = licences.mpl_two()
                     elif licence == "APACHE":
-                        wlicence = licences.apache()
+                        wlicence = licences.apache_two()
                     else:
                         wlicence = ""
                     if wlicence:
@@ -296,13 +296,13 @@ import flask
                 if licence == "GPL":
                     wlicence = licences.gnu_gpl_three()
                 elif licence == "LGPL":
-                    wlicence = licences.gnu_lgpl_three()
+                    wlicence = licences.gnu_lgpl_licence()
                 elif licence == "MIT":
-                    wlicence = licences.mit()
+                    wlicence = licences.mit_licence()
                 elif licence == "MPL":
-                    wlicence = licences.mpl()
+                    wlicence = licences.mpl_two()
                 elif licence == "APACHE":
-                    wlicence = licences.apache()
+                    wlicence = licences.apache_two()
                 else:
                     wlicence = ""
                 if wlicence:
@@ -318,6 +318,8 @@ import flask
                 if not os.path.exists(page_path):
                     with open(page_path, "w") as f:
                         f.write("")
+
+        os.chdir(os.expanduser("~"))
         print("Project generated.")
 
 class CLI:

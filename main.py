@@ -148,7 +148,7 @@ class PyServerCLI:
             ]
        },
        "help": {
-           "description": "Show desription for a command.",
+           "description": "Show description for a command.",
            "args": [
                {"pos": 1, "options": "any", "optional": True}
            ]
@@ -231,7 +231,7 @@ class PyServerCLI_commands():
     def newProject(project_path, licence=None):
         if os.name == "nt":
             config_path = "C:/ProgramData/pyserver_designer/config.json"
-        else:
+        elif os.name == "posix":
             config_path = os.path.expanduser("~/.config/pyserver_designer/config.json")
 
         project_name = os.path.basename(project_path)

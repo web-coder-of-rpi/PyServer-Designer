@@ -338,7 +338,11 @@ class CLI:
                 # Non-interactive environment: handle accordingly
                 print("Non-interactive mode detected. Skipping CLI input.")
                 # Optionally run tests or exit gracefully
-                command = None 
+                if os.name == 'nt':
+                    os.system("cls")
+                else:
+                    os.system("clear")
+                break
             if command.lower() in ['exit', 'quit']:
                 print("Exiting PyServer Designer CLI.")
                 if os.name == "nt":

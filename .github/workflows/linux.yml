@@ -21,4 +21,5 @@ jobs:
 
       - name: Run tests
         run: |
-          python -m unittest discover
+          sudo python setup.py
+          sudo python main.py

@@ -332,7 +332,13 @@ class CLI:
         print(f"PyServer Designer CLI")
         print("Type 'help' for a list of commands. Use 'exit' or 'quit' to exit the CLI, and 'restart' or 'reset' to re-run the program.")
         while True:
-            command = input("PyServer> ")  
+            if sys.stdin.isatty():
+                command = input("PyServer> ")
+            else:
+                # Non-interactive environment: handle accordingly
+                print("Non-interactive mode detected. Skipping CLI input.")
+                # Optionally run tests or exit gracefully
+                command = None 
             if command.lower() in ['exit', 'quit']:
                 print("Exiting PyServer Designer CLI.")
                 if os.name == "nt":
